@@ -1,0 +1,23 @@
+package Schule.Geometrie.Tests;
+
+import static org.junit.Assert.*;
+
+import org.junit.Assert;
+import org.junit.Test;
+
+import Schule.Geometrie.Rechteck;
+
+public class Rechteck_Tests {
+
+	@Test
+	public void TestIfSettersWork()
+	{
+		Rechteck rechteck = new Rechteck();
+		rechteck.setSeiteA(1.0);
+		rechteck.setSeiteB(2.0);
+		
+		assertEquals(1.0, rechteck.getSeiteA());
+		assertEquals(2.0, rechteck.getSeiteB());
+	}
+	
+}

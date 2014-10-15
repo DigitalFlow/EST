@@ -1,0 +1,43 @@
+package Schule.Kram;
+
+public class Sparkonto extends Konto {
+	public double zinsSatz;
+	
+	public Sparkonto() {
+		System.out.println("Girokonto Konstruktor");
+	}
+	
+	public Sparkonto(String kontoNummer, double kontoStand, double zins)
+	{
+		this();
+		this.setkNr(kontoNummer);
+		this.setkStand(kontoStand);
+		this.setZinsSatz(zins);
+	}
+	
+	public void setZinsSatz(double value) {
+		zinsSatz = value;
+	}
+	
+	public double getZinsSatz() 
+	{
+		return zinsSatz;
+	}
+	
+	public void print()
+	{
+		System.out.println("Kontonummer: " + getkNr() + ", Kontostand: " + getkStand() + ", Dispo: " + getDispot());
+	}
+
+	@Override
+	public String getKontoTyp() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean abheben(double betrag) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+}

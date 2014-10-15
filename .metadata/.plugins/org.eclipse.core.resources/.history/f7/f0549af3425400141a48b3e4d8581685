@@ -1,0 +1,15 @@
+package Schule.Geometrie.Tests;
+
+import org.junit.Assert;
+import org.junit.Test;
+import Schule.Geometrie.Rechteck;;
+
+public class Rechteck_Tests {
+
+	@Test
+	public void TestIfSettersWork()
+	{
+		Rechteck rechteck = new Rechteck();
+	}
+	
+}

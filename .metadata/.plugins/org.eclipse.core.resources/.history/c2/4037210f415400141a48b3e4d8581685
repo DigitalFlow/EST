@@ -1,0 +1,41 @@
+package Schule.Kram;
+
+public class Rechteck {
+	private double seiteA;
+	private double seiteB;
+	
+	public Rechteck()
+	{
+		
+	}
+	
+	public double getSeiteA() {
+		return seiteA;
+	}
+
+	public void setSeiteA(double seiteA) {
+		this.seiteA = seiteA;
+	}
+
+	public double getSeiteB() {
+		return seiteB;
+	}
+
+	public void setSeiteB(double seiteB) {
+		this.seiteB = seiteB;
+	}
+
+	public Rechteck(double a, double b) 
+	{
+		seiteA = a;
+		seiteB = b;
+	}
+	
+	public Rechteck(String a, String b) 
+	{
+		double parsedA = Double.parseDouble(a);
+		setSeiteA(parsedA);
+		double parsedB = Double.parseDouble(b);
+		setSeiteA(parsedB);
+	}
+}

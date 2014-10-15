@@ -1,0 +1,18 @@
+package Schule.Kram;
+
+public class Girokonto extends Konto {
+	public double dispot;
+	
+	public Girokonto() {
+		dispot = 0;
+	}
+	
+	public void setDispot(double value) {
+		dispot = value;
+	}
+	
+	public double getDispot() 
+	{
+		return dispot;
+	}
+}

@@ -1,0 +1,5 @@
+package Schule.Kram;
+
+public class Girokonto extends Konto {
+
+}

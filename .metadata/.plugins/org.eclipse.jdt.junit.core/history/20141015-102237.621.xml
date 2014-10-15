@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?><testrun name="Rechteck_Tests" project="OOP" tests="6" started="6" failures="0" errors="0" ignored="0">
+  <testsuite name="Schule.Geometrie.Tests.Rechteck_Tests" time="0.0">
+    <testcase name="TestIfGetUmfangWorks" classname="Schule.Geometrie.Tests.Rechteck_Tests" time="0.0"/>
+    <testcase name="TestIfIsQuadratWorks" classname="Schule.Geometrie.Tests.Rechteck_Tests" time="0.0"/>
+    <testcase name="TestIfToStringWorks" classname="Schule.Geometrie.Tests.Rechteck_Tests" time="0.0"/>
+    <testcase name="TestIfDoubleSettersWork" classname="Schule.Geometrie.Tests.Rechteck_Tests" time="0.0"/>
+    <testcase name="TestIfStringSettersWork" classname="Schule.Geometrie.Tests.Rechteck_Tests" time="0.0"/>
+    <testcase name="TestIfGetFlaecheWorks" classname="Schule.Geometrie.Tests.Rechteck_Tests" time="0.0"/>
+  </testsuite>
+</testrun>

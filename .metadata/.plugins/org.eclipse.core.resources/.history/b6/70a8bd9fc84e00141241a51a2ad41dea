@@ -1,0 +1,5 @@
+package Schule.Vererbung;
+
+public abstract class Konto {
+
+}
