@@ -4,6 +4,7 @@
 .mtj.tmp/
 
 .metadata/
+bin/
 
 # Package Files #
 *.jar
