@@ -17,6 +17,7 @@ class Messwert {
 	
 	public Messwert(double wert, GregorianCalendar messDatum)
 	{
+		this();
 		this.wert = wert;
 		this.messDatum = messDatum;
 	}
@@ -29,5 +30,10 @@ class Messwert {
 	}
 	public int getMesswertID() {
 		return messwertID;
+	}
+
+	@Override
+	public String toString() {
+		return "ID: " + messwertID + ", Messdatum: " + messDatum + ", Wert: " + wert;
 	}
 }

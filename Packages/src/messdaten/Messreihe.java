@@ -2,7 +2,7 @@ package messdaten;
 
 import java.util.GregorianCalendar;
 
-class Messreihe {
+public class Messreihe {
 
 	protected Messwert[] messwerte;
 	
@@ -39,7 +39,7 @@ class Messreihe {
 	{
 		for(Messwert m : messwerte)
 		{
-			
+			System.out.println(m.toString());
 		}
 	}
 	
