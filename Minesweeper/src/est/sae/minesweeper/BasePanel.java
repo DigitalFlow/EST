@@ -20,15 +20,11 @@ public class BasePanel extends JPanel{
 		this.rows = rows;
 		this.cols = cols;
 		MineCount = mines;
-		_Buttons = new MineButton[cols][rows];
 		_ButtonAction = new ButtonActions();
 		
 		_Layout = new GridLayout(cols, rows);
 		this.setLayout(_Layout);
-		
-		InitializeButtons();
-		PlantMines();
-		CalculateButtonNames();
+		GenerateField();
 	}
 	
 	private void CalculateButtonNames() {
@@ -166,6 +162,21 @@ public class BasePanel extends JPanel{
 				minesPlanted++;
 			}
 		}
+	}
+	
+	public void RegenerateField()
+	{
+		this.removeAll();
+		GenerateField();
+		this.repaint();
+	}
+	
+	public void GenerateField()
+	{
+		_Buttons = new MineButton[cols][rows];
+		InitializeButtons();
+		PlantMines();
+		CalculateButtonNames();
 	}
 	
 	public void DisableAllButtons()

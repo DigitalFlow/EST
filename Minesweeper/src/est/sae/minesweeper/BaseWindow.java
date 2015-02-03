@@ -2,6 +2,9 @@ package est.sae.minesweeper;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.Timer;
@@ -20,11 +23,15 @@ public class BaseWindow extends JFrame implements ActionListener {
 	private JLabel _MinesLeft = new JLabel("0", SwingConstants.CENTER);
 	private JLabel _Counter = new JLabel("0", SwingConstants.CENTER);
 	private JPanel _InfoPanel = new JPanel();
+	private JMenuBar _MenuBar = new JMenuBar();
+	private JMenu _FileMenu = new JMenu("File");
+	private JMenuItem _ChooseDifficulty = new JMenuItem("Choose Difficulty");
+	private JMenuItem _RestartGame = new JMenuItem("Restart Game");
 	private BasePanel _FieldPanel = new ProfessionalPanel();
 	private BorderLayout _WindowLayout = new BorderLayout();
 	private BorderLayout _InfoLayout = new BorderLayout();
 	private Dimension _WindowSize = new Dimension(500, 600);
-	private JLabel _State = new JLabel("Spiel läuft");
+	private JLabel _State = new JLabel();
 	private Timer timer = new Timer(1000, this);
 	private long startTime;
 		
@@ -53,19 +60,38 @@ public class BaseWindow extends JFrame implements ActionListener {
 		
 		// Formatting FieldPanel, used for displaying mine fields
 		_FieldPanel.setBorder(BorderFactory.createLoweredBevelBorder());
-		_MinesLeft.setText(String.valueOf(_FieldPanel.getMineCount()));
-		
 		this.add(_FieldPanel, BorderLayout.CENTER);
 		
 		_State.setPreferredSize(new Dimension(this.getWidth(), 20));
 		this.add(_State, BorderLayout.SOUTH);
 		
+		BuildMenu();
+		this.setJMenuBar(_MenuBar);
+		
+		StartGame();
+	}
+	
+	public void SetStartTime()
+	{
+		startTime = System.currentTimeMillis();
+	}
+	
+	public void InitializeMineCounter()
+	{
+		_MinesLeft.setText(String.valueOf(_FieldPanel.getMineCount()));
+	}
+	
+	public void StartGame()
+	{
+		InitializeMineCounter();
+		_FieldPanel.RegenerateField();
+		SetStartTime();
+		 _State.setText("Spiel läuft");
+		
 		// Pack Frame to set window size to be big enough to set all components to their preferred size
 		this.pack();
 		this.setVisible(true);
-		
-		startTime = System.currentTimeMillis();
-		
+		SetStartTime();
 		timer.start();
 	}
 	
@@ -83,10 +109,26 @@ public class BaseWindow extends JFrame implements ActionListener {
 		BaseWindow base = new BaseWindow();
 		base.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
+	
+	public void BuildMenu()
+	{
+		_RestartGame.addActionListener(this);
+		_FileMenu.add(_RestartGame);
+		_FileMenu.add(_ChooseDifficulty);
+		_MenuBar.add(_FileMenu);
+	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		_Counter.setText(String.valueOf((System.currentTimeMillis() - startTime)/1000));
+		if(e.getSource() == timer)
+		{
+			_Counter.setText(String.valueOf((System.currentTimeMillis() - startTime)/1000));
+		}
+		else if(e.getSource() == _RestartGame)
+		{
+			StartGame();
+		}
+		
 	}
 	
 	public void LostGame()
