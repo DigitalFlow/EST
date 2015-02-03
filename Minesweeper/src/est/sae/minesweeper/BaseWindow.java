@@ -17,7 +17,7 @@ public class BaseWindow extends JFrame{
 	private JLabel _MinesFound = new JLabel("0", SwingConstants.CENTER);
 	private JLabel _Counter = new JLabel("0", SwingConstants.CENTER);
 	private JPanel _InfoPanel = new JPanel();
-	private BasePanel _FieldPanel = new BeginnerPanel();
+	private BasePanel _FieldPanel = new ProfessionalPanel();
 	private BorderLayout _WindowLayout = new BorderLayout();
 	private BorderLayout _InfoLayout = new BorderLayout();
 	private Dimension _WindowSize = new Dimension(500, 600);
