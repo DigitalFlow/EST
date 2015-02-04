@@ -7,7 +7,9 @@ import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
 public class ButtonActions implements MouseListener{
-
+	
+	public static enum actionTaken { PRESSED, FLAGGED, UNFLAGGED }; 
+	
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		MineButton buttonPressed = (MineButton)e.getSource();
@@ -28,6 +30,7 @@ public class ButtonActions implements MouseListener{
 				frame.LostGame();
 			}
 			
+			frame.ButtonActionOccured(buttonPressed, actionTaken.PRESSED);
 			buttonPressed.repaint();
 		}
 		else
@@ -36,11 +39,13 @@ public class ButtonActions implements MouseListener{
 			{
 				buttonPressed.setText("F");
 				frame.LowerCounter();
+				frame.ButtonActionOccured(buttonPressed, actionTaken.FLAGGED);
 			}
 			else
 			{
 				buttonPressed.setText("");
 				frame.RaiseCounter();
+				frame.ButtonActionOccured(buttonPressed, actionTaken.UNFLAGGED);
 			}
 			
 			buttonPressed.repaint();

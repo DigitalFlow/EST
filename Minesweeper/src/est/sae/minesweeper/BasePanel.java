@@ -14,6 +14,8 @@ public class BasePanel extends JPanel{
 	protected int MineCount;
 	protected int rows;
 	protected int cols;
+	private ArrayList<MineButton> _ButtonsFlagged;
+	private ArrayList<MineButton> _ButtonsUnhidden;
 	
 	public BasePanel(int cols, int rows, int mines)
 	{		
@@ -171,9 +173,43 @@ public class BasePanel extends JPanel{
 		this.repaint();
 	}
 	
+	public boolean ButtonWasUnhidden(MineButton button)
+	{
+		_ButtonsUnhidden.add(button);
+		return CheckIfGameIsWon();
+	}
+	
+	public boolean ButtonWasFlagged(MineButton button)
+	{
+		_ButtonsFlagged.add(button);
+		return CheckIfGameIsWon();
+	}
+	
+	public boolean CheckIfGameIsWon()
+	{
+		boolean flaggedAllMinesExclusively = true;
+		
+		for(MineButton button : _ButtonsFlagged)
+		{
+			if(button.getHiddenText() != "M")
+			{
+				flaggedAllMinesExclusively = false;
+			}
+		}
+		
+		if(flaggedAllMinesExclusively && _ButtonsUnhidden.size() + _ButtonsFlagged.size() == rows*cols)
+		{
+			return true;
+		}
+		
+		return false;
+	}
+	
 	public void GenerateField()
 	{
 		_Buttons = new MineButton[cols][rows];
+		_ButtonsFlagged = new ArrayList<MineButton>();
+		_ButtonsUnhidden = new ArrayList<MineButton>();
 		InitializeButtons();
 		PlantMines();
 		CalculateButtonNames();
@@ -190,6 +226,10 @@ public class BasePanel extends JPanel{
 				currentButton.setText(currentButton.getHiddenText());
 			}
 		}
+	}
+
+	public void ButtonWasUnflagged(MineButton buttonPressed) {
+		_ButtonsFlagged.remove(buttonPressed);
 	}
 
 }

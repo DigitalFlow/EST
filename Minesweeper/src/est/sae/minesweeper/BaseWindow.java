@@ -18,6 +18,8 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JFrame;
 
+import est.sae.minesweeper.ButtonActions.actionTaken;
+
 public class BaseWindow extends JFrame implements ActionListener {
 	
 	private JLabel _MinesLeft = new JLabel("0", SwingConstants.CENTER);
@@ -57,20 +59,20 @@ public class BaseWindow extends JFrame implements ActionListener {
 		_InfoPanel.add(_MinesLeft, BorderLayout.LINE_START);
 		_InfoPanel.add(_Counter, BorderLayout.LINE_END);
 		this.add(_InfoPanel, BorderLayout.PAGE_START);
-		
-		// Formatting FieldPanel, used for displaying mine fields
-		_FieldPanel.setBorder(BorderFactory.createLoweredBevelBorder());
-		this.add(_FieldPanel, BorderLayout.CENTER);
-		
+				
 		_State.setPreferredSize(new Dimension(this.getWidth(), 20));
 		this.add(_State, BorderLayout.SOUTH);
 		
-		BuildMenu();
 		this.setJMenuBar(_MenuBar);
-		
 		StartGame();
 	}
 	
+	private void InitializeFieldPanel() {
+		// Formatting FieldPanel, used for displaying mine fields
+		_FieldPanel.setBorder(BorderFactory.createLoweredBevelBorder());
+		this.add(_FieldPanel, BorderLayout.CENTER);
+	}
+
 	public void SetStartTime()
 	{
 		startTime = System.currentTimeMillis();
@@ -83,10 +85,12 @@ public class BaseWindow extends JFrame implements ActionListener {
 	
 	public void StartGame()
 	{
+		BuildMenu();
+		InitializeFieldPanel();
 		InitializeMineCounter();
 		_FieldPanel.RegenerateField();
 		SetStartTime();
-		 _State.setText("Spiel läuft");
+		_State.setText("Spiel läuft");
 		
 		// Pack Frame to set window size to be big enough to set all components to their preferred size
 		this.pack();
@@ -113,6 +117,7 @@ public class BaseWindow extends JFrame implements ActionListener {
 	public void BuildMenu()
 	{
 		_RestartGame.addActionListener(this);
+		_ChooseDifficulty.addActionListener(this);
 		_FileMenu.add(_RestartGame);
 		_FileMenu.add(_ChooseDifficulty);
 		_MenuBar.add(_FileMenu);
@@ -128,14 +133,50 @@ public class BaseWindow extends JFrame implements ActionListener {
 		{
 			StartGame();
 		}
-		
+		else if(e.getSource() == _ChooseDifficulty)
+		{
+			this.remove(_FieldPanel);
+			_FieldPanel = new BeginnerPanel();
+			StartGame();
+		}
+	}
+	
+	public void HaltGame()
+	{
+		timer.stop();
+		_FieldPanel.DisableAllButtons();
 	}
 	
 	public void LostGame()
 	{
-		timer.stop();
-		_FieldPanel.DisableAllButtons();
+		HaltGame();
 		_State.setText("Leider verloren!");
 	}
 
+	public void WinGame()
+	{
+		HaltGame();
+		_State.setText("Gewonnen!");
+	}
+
+	public void ButtonActionOccured(MineButton buttonPressed, actionTaken pressed) {
+		boolean gameWon = false;
+		
+		switch(pressed)
+		{
+			case PRESSED:
+				gameWon = _FieldPanel.ButtonWasUnhidden(buttonPressed);
+				break;
+			case FLAGGED:
+				gameWon = _FieldPanel.ButtonWasFlagged(buttonPressed);
+				break;
+			case UNFLAGGED:
+				_FieldPanel.ButtonWasUnflagged(buttonPressed);
+		}
+		
+		if(gameWon)
+		{
+			WinGame();
+		}
+	}
 }
