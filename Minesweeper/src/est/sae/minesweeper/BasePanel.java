@@ -2,11 +2,13 @@ package est.sae.minesweeper;
 
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Random;
+
 import javax.swing.JPanel;
 
-public class BasePanel extends JPanel{
+public class BasePanel extends JPanel implements Serializable {
 
 	private GridLayout _Layout;
 	private MineButton[][] _Buttons;

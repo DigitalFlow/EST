@@ -2,11 +2,12 @@ package est.sae.minesweeper;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.Serializable;
 
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
-public class ButtonActions implements MouseListener{
+public class ButtonActions implements MouseListener, Serializable {
 	
 	public static enum actionTaken { PRESSED, FLAGGED, UNFLAGGED }; 
 	
