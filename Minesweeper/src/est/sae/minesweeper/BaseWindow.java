@@ -5,6 +5,7 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.Timer;
@@ -15,6 +16,9 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.JFrame;
 
@@ -36,6 +40,7 @@ public class BaseWindow extends JFrame implements ActionListener {
 	private JLabel _State = new JLabel();
 	private Timer timer = new Timer(1000, this);
 	private long startTime;
+	private static enum _Difficulty {Beginner, Advanced, Professional};
 		
 	public BaseWindow()
 	{
@@ -62,7 +67,7 @@ public class BaseWindow extends JFrame implements ActionListener {
 				
 		_State.setPreferredSize(new Dimension(this.getWidth(), 20));
 		this.add(_State, BorderLayout.SOUTH);
-		
+		BuildMenu();
 		this.setJMenuBar(_MenuBar);
 		StartGame();
 	}
@@ -85,7 +90,6 @@ public class BaseWindow extends JFrame implements ActionListener {
 	
 	public void StartGame()
 	{
-		BuildMenu();
 		InitializeFieldPanel();
 		InitializeMineCounter();
 		_FieldPanel.RegenerateField();
@@ -135,10 +139,53 @@ public class BaseWindow extends JFrame implements ActionListener {
 		}
 		else if(e.getSource() == _ChooseDifficulty)
 		{
-			this.remove(_FieldPanel);
-			_FieldPanel = new BeginnerPanel();
-			StartGame();
+			DisplayDifficultyDialog();
 		}
+	}
+	
+	public void DisplayDifficultyDialog()
+	{
+		int n = JOptionPane.showOptionDialog(this,
+				"Please choose the difficulty you want to play.",
+				"Choose difficulty",
+				JOptionPane.YES_NO_CANCEL_OPTION,
+				JOptionPane.QUESTION_MESSAGE,
+				null,	
+				_Difficulty.values(),
+				_Difficulty.Beginner);
+		
+		switch (n)
+		{
+			case JOptionPane.YES_OPTION:
+				SetDifficulty(_Difficulty.Beginner);
+				break;
+			case JOptionPane.NO_OPTION:
+				SetDifficulty(_Difficulty.Advanced);
+				break;
+			case JOptionPane.CANCEL_OPTION:
+				SetDifficulty(_Difficulty.Professional);
+				break;
+		}
+	}
+	
+	public void SetDifficulty(_Difficulty difficulty)
+	{
+		this.remove(_FieldPanel);
+		
+		switch (difficulty)
+		{
+			case Beginner:
+				_FieldPanel = new BeginnerPanel();
+				break;
+			case Advanced:
+				_FieldPanel = new AdvancedPanel();
+				break;
+			case Professional:
+				_FieldPanel = new ProfessionalPanel();
+				break;
+		}
+		
+		StartGame();
 	}
 	
 	public void HaltGame()
@@ -179,4 +226,9 @@ public class BaseWindow extends JFrame implements ActionListener {
 			WinGame();
 		}
 	}
+
+	public void EmptyButtonPressed(MineButton buttonPressed) {
+		_FieldPanel.UnveilAdjacentEmptyButtons(buttonPressed);		
+	}
+
 }

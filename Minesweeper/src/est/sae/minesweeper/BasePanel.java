@@ -232,4 +232,56 @@ public class BasePanel extends JPanel{
 		_ButtonsFlagged.remove(buttonPressed);
 	}
 
+	public void UnveilAdjacentEmptyButtons(MineButton buttonPressed) {
+		int buttonCol = 0;
+		int buttonRow = 0;
+		
+		for(int col = 0; col < cols; col++)
+		{
+			for(int row = 0; row < rows; row++)
+			{
+				if(_Buttons[col][row] == buttonPressed)
+				{
+					buttonCol = col;
+					buttonRow = row;
+					break;
+				}
+			}
+		}
+		
+		UnveilButtons(buttonCol, buttonRow);
+	}
+	
+	public void UnveilButtons(int col, int row)
+	{
+		UnveilButton(col - 1, row - 1);
+		UnveilButton(col, row - 1);
+		UnveilButton(col + 1, row - 1); 
+		UnveilButton(col - 1, row);
+		UnveilButton(col + 1, row);
+		UnveilButton(col - 1, row + 1); 
+		UnveilButton(col, row + 1);
+		UnveilButton(col + 1, row + 1);
+	}
+
+	private void UnveilButton(int col, int row) {
+		if(col >= 0 && col < cols && row >= 0 && row < rows)
+		{
+			MineButton button = _Buttons[col][row];
+			
+			if(!button.isEnabled())
+			{
+				return;
+			}
+			
+			button.setText(button.getHiddenText());
+			button.setEnabled(false);
+			
+			if(button.getText().equals("0"))
+			{
+				UnveilButtons(col, row);
+			}
+		}
+	}
+
 }

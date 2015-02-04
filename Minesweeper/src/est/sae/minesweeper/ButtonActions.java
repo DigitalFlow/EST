@@ -25,9 +25,13 @@ public class ButtonActions implements MouseListener{
 			buttonPressed.setText(buttonPressed.getHiddenText());
 			buttonPressed.setEnabled(false);
 			
-			if(buttonPressed.getHiddenText() == "M")
+			if(buttonPressed.getHiddenText().equals("M"))
 			{
 				frame.LostGame();
+			}
+			else if(buttonPressed.getHiddenText().equals("0"))
+			{
+				frame.EmptyButtonPressed(buttonPressed);
 			}
 			
 			frame.ButtonActionOccured(buttonPressed, actionTaken.PRESSED);
