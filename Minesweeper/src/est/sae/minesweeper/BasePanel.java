@@ -190,13 +190,19 @@ public class BasePanel extends JPanel implements Serializable {
 	
 	public boolean ButtonWasUnhidden(MineButton button)
 	{
-		_ButtonsUnhidden.add(button);
+		if(!_ButtonsUnhidden.contains(button))
+		{
+			_ButtonsUnhidden.add(button);
+		}
 		return CheckIfGameIsWon();
 	}
 	
 	public boolean ButtonWasFlagged(MineButton button)
 	{
-		_ButtonsFlagged.add(button);
+		if(!_ButtonsFlagged.contains(button))
+		{
+			_ButtonsFlagged.add(button);
+		}
 		return CheckIfGameIsWon();
 	}
 	
@@ -206,7 +212,7 @@ public class BasePanel extends JPanel implements Serializable {
 		
 		for(MineButton button : _ButtonsFlagged)
 		{
-			if(button.getHiddenText().equals("M"))
+			if(!button.getHiddenText().equals("M"))
 			{
 				flaggedAllMinesExclusively = false;
 			}
@@ -244,7 +250,10 @@ public class BasePanel extends JPanel implements Serializable {
 	}
 
 	public void ButtonWasUnflagged(MineButton buttonPressed) {
-		_ButtonsFlagged.remove(buttonPressed);
+		if(_ButtonsFlagged.contains(buttonPressed))
+		{
+			_ButtonsFlagged.remove(buttonPressed);
+		}
 	}
 
 	public void UnveilAdjacentEmptyButtons(MineButton buttonPressed) {
