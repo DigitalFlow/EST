@@ -70,6 +70,7 @@ public class BaseWindow extends JFrame implements ActionListener {
 		// Call parent class for setting window name
 		super("Minesweeper");
 		FormatUI();
+		BuildMenu();
 		StartGame();
 	}
 	
@@ -94,7 +95,6 @@ public class BaseWindow extends JFrame implements ActionListener {
 						
 				_State.setPreferredSize(new Dimension(this.getWidth(), 20));
 				this.add(_State, BorderLayout.SOUTH);
-				BuildMenu();
 				this.setJMenuBar(_MenuBar);
 	}
 
