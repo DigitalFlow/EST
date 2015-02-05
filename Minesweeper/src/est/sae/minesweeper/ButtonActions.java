@@ -28,7 +28,7 @@ public class ButtonActions implements MouseListener, Serializable {
 		
 		if(SwingUtilities.isLeftMouseButton(e))
 		{
-			if(buttonPressed.getText() == "F")
+			if(buttonPressed.getText().equals("F"))
 			{
 				frame.RaiseCounter();
 			}
@@ -51,7 +51,7 @@ public class ButtonActions implements MouseListener, Serializable {
 		}
 		else
 		{
-			if(buttonPressed.getText() != "F")
+			if(!buttonPressed.getText().equals("F"))
 			{
 				buttonPressed.setText("F");
 				frame.LowerCounter();
