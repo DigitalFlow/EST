@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 public class BasePanel extends JPanel implements Serializable {
 
@@ -288,7 +289,14 @@ public class BasePanel extends JPanel implements Serializable {
 				return;
 			}
 			
+			if(button.getText().equals("F"))
+			{
+				BaseWindow frame = (BaseWindow) SwingUtilities.getRoot(this);
+				frame.RaiseCounter();
+			}
+			
 			_ButtonsUnhidden.add(button);
+			
 			button.setText(button.getHiddenText());
 			button.setEnabled(false);
 			
