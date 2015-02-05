@@ -9,12 +9,22 @@ import javax.swing.SwingUtilities;
 
 public class ButtonActions implements MouseListener, Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4452420546314918200L;
+
 	public static enum actionTaken { PRESSED, FLAGGED, UNFLAGGED }; 
 	
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		MineButton buttonPressed = (MineButton)e.getSource();
 		BaseWindow frame = (BaseWindow) SwingUtilities.getRoot(buttonPressed);
+		
+		if(!buttonPressed.isEnabled())
+		{
+			return;
+		}
 		
 		if(SwingUtilities.isLeftMouseButton(e))
 		{

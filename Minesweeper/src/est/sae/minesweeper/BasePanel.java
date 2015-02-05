@@ -10,6 +10,10 @@ import javax.swing.JPanel;
 
 public class BasePanel extends JPanel implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4542952501438397551L;
 	private GridLayout _Layout;
 	private MineButton[][] _Buttons;
 	private ButtonActions _ButtonAction;
@@ -107,6 +111,14 @@ public class BasePanel extends JPanel implements Serializable {
 				_Buttons[col][row].setHiddenText(String.valueOf(value));
 			}
 		}
+	}
+
+	public int getRows() {
+		return rows;
+	}
+
+	public int getCols() {
+		return cols;
 	}
 
 	private boolean IsButtonMine(int col, int row) {
@@ -276,6 +288,7 @@ public class BasePanel extends JPanel implements Serializable {
 				return;
 			}
 			
+			_ButtonsUnhidden.add(button);
 			button.setText(button.getHiddenText());
 			button.setEnabled(false);
 			

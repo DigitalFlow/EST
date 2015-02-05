@@ -8,6 +8,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
 import javax.swing.Timer;
@@ -22,12 +23,15 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.nio.file.Files;
+import java.util.ArrayList;
 
 import javax.swing.JFrame;
 
@@ -35,22 +39,31 @@ import est.sae.minesweeper.ButtonActions.actionTaken;
 
 public class BaseWindow extends JFrame implements ActionListener {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 149684488393599155L;
+	private final String _HighScorePath = System.getProperty("user.dir") + "\\MineSweeperHighscores";
 	private JLabel _MinesLeft = new JLabel("0", SwingConstants.CENTER);
 	private JLabel _Counter = new JLabel("0", SwingConstants.CENTER);
 	private JPanel _InfoPanel = new JPanel();
 	private JMenuBar _MenuBar = new JMenuBar();
 	private JMenu _FileMenu = new JMenu("File");
+	private JMenu _HighscoreMenu = new JMenu("Highscores");
 	private JMenuItem _ChooseDifficulty = new JMenuItem("Choose Difficulty");
 	private JMenuItem _RestartGame = new JMenuItem("Restart Game");
 	private JMenuItem _LoadGame = new JMenuItem("Load Game");
 	private JMenuItem _SaveGame = new JMenuItem("Save Game");
+	private JMenuItem _ShowHighscore = new JMenuItem("Show Highscores");
+	private JMenuItem _DeleteHighscore = new JMenuItem("Delete Highscores");
 	private BasePanel _FieldPanel = new BeginnerPanel();
 	private BorderLayout _WindowLayout = new BorderLayout();
 	private BorderLayout _InfoLayout = new BorderLayout();
 	private Dimension _WindowSize = new Dimension(500, 600);
 	private JLabel _State = new JLabel();
-	private Timer timer = new Timer(1000, this);
+	private Timer _Timer = new Timer(1000, this);
 	private static enum _Difficulty {Beginner, Advanced, Professional};
+	private ArrayList<HighScore> _HighScores;
 		
 	public BaseWindow()
 	{
@@ -102,12 +115,13 @@ public class BaseWindow extends JFrame implements ActionListener {
 		InitializeMineCounter();
 		_FieldPanel.RegenerateField();
 		_State.setText("Spiel läuft");
+		_Counter.setText("0");
 		
 		
 		// Pack Frame to set window size to be big enough to set all components to their preferred size
 		this.pack();
 		this.setVisible(true);
-		timer.start();
+		_Timer.start();
 	}
 	
 	public void StartSaveGame()
@@ -119,7 +133,7 @@ public class BaseWindow extends JFrame implements ActionListener {
 		this.pack();
 		this.setVisible(true);
 		
-		timer.start();
+		_Timer.start();
 	}
 	
 	public void LowerCounter()
@@ -151,16 +165,21 @@ public class BaseWindow extends JFrame implements ActionListener {
 		_SaveGame.addActionListener(this);
 		_SaveGame.setAccelerator(KeyStroke.getKeyStroke(
 		        KeyEvent.VK_F5, ActionEvent.ALT_MASK));
+		_ShowHighscore.addActionListener(this);
+		_DeleteHighscore.addActionListener(this);
 		_FileMenu.add(_RestartGame);
 		_FileMenu.add(_ChooseDifficulty);
 		_FileMenu.add(_LoadGame);
 		_FileMenu.add(_SaveGame);
+		_HighscoreMenu.add(_ShowHighscore);
+		_HighscoreMenu.add(_DeleteHighscore);
 		_MenuBar.add(_FileMenu);
+		_MenuBar.add(_HighscoreMenu);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if(e.getSource() == timer)
+		if(e.getSource() == _Timer)
 		{
 			_Counter.setText(String.valueOf(Integer.valueOf(_Counter.getText()) + 1));
 		}
@@ -180,8 +199,122 @@ public class BaseWindow extends JFrame implements ActionListener {
 		{
 			SaveGame();	
 		}
+		else if(e.getSource() == _ShowHighscore)
+		{
+			ShowHighscore();
+		}
+		else if(e.getSource() == _DeleteHighscore)
+		{
+			DeleteHighscore();
+		}
 	}
 	
+	private void ShowHighscore() {
+		LoadHighScore();
+		
+		String scores = "Player Name" + "\t\t" + "Difficulty" + "\t\t" + "Time Needed" + "\t\t" + "Score" + "\n";
+		
+		for(HighScore score : _HighScores)
+		{
+			scores += score.getPlayerName() + "\t\t" + score.getDifficulty() + "\t\t" + score.getTimeNeeded() + "\t\t" + score.getScore() + "\n";
+		}
+		
+		JOptionPane.showMessageDialog(this, new JTextArea(scores));
+	}
+	
+	private void DeleteHighscore() {
+		File highScore = new File(_HighScorePath);
+		
+		if(highScore.exists())
+		{
+			highScore.delete();
+		}
+	}
+
+	private void CreateHighscoreEntry() {
+		File highScore = new File(_HighScorePath);
+		
+		if(highScore.exists())
+		{
+			LoadHighScore();
+		}
+
+		String difficulty = ""; 
+			
+		if(_FieldPanel instanceof BeginnerPanel)
+		{
+			difficulty = _Difficulty.Beginner.name();
+		}
+		else if(_FieldPanel instanceof AdvancedPanel)
+		{
+			difficulty = _Difficulty.Advanced.name();
+		}
+		else if(_FieldPanel instanceof ProfessionalPanel)
+		{
+			difficulty = _Difficulty.Professional.name();
+		}
+		
+		String playerName = JOptionPane.showInputDialog(this, "Please enter your Name for your highscore entry!", "Annonymous");
+		
+		if(playerName == null)
+		{
+			playerName = "Annonymous";
+		}
+		
+		_HighScores = HighScore.AddNewEntry(_HighScores, playerName, difficulty, _FieldPanel.getRows(), _FieldPanel.getCols(), Integer.valueOf(_Counter.getText()));
+		SaveHighScores();
+	
+	}
+	
+	private void LoadHighScore() {
+		Object tempObj = null;
+		
+		File score = new File(_HighScorePath);
+		
+		if(!score.exists())
+		{
+			_HighScores = new ArrayList<HighScore>();
+			return;
+		}
+		
+		try
+		{
+			FileInputStream fileIn = new FileInputStream(score);
+			ObjectInputStream objectIn = new ObjectInputStream(fileIn);
+			tempObj = objectIn.readObject();
+			objectIn.close();
+			fileIn.close();
+		}
+		catch(Exception ex)
+		{
+			ex.printStackTrace();
+		}
+		
+		if(tempObj instanceof ArrayList<?>)
+		{
+			_HighScores = (ArrayList<HighScore>) tempObj;
+		}
+	}
+
+	private void SaveHighScores() {
+		try
+		{
+			FileOutputStream fileOut = new FileOutputStream(_HighScorePath);
+			ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
+			objectOut.writeObject(_HighScores);
+			objectOut.flush();
+			objectOut.close();
+			fileOut.flush();
+			fileOut.close();
+			objectOut = null;
+			fileOut = null;
+		}
+		catch(Exception ex)
+		{
+			System.out.println(ex.getMessage());
+		}
+	}
+
 	private void LoadGame() {
 		JFileChooser saveFileChooser = new JFileChooser(); 	
 		saveFileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
@@ -215,7 +348,7 @@ public class BaseWindow extends JFrame implements ActionListener {
 			ex.printStackTrace();
 		}
 
-		timer.stop();
+		_Timer.stop();
 		this.remove(_InfoPanel);
 		this.remove(_FieldPanel);
 		_InfoPanel = tempInfoPanel;
@@ -309,7 +442,7 @@ public class BaseWindow extends JFrame implements ActionListener {
 	
 	public void HaltGame()
 	{
-		timer.stop();
+		_Timer.stop();
 		_FieldPanel.DisableAllButtons();
 	}
 	
@@ -322,6 +455,7 @@ public class BaseWindow extends JFrame implements ActionListener {
 	public void WinGame()
 	{
 		HaltGame();
+		CreateHighscoreEntry();
 		_State.setText("Gewonnen!");
 	}
 

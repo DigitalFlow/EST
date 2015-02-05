@@ -4,6 +4,10 @@ import javax.swing.JButton;
 
 public class MineButton extends JButton {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2640320821367730007L;
 	private String hiddenText = "";
 	
 	public MineButton()
