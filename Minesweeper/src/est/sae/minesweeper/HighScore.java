@@ -36,7 +36,7 @@ public class HighScore implements Serializable, Comparable<HighScore>{
 		
 		_PlayerName = playerName;
 		_Difficulty = difficulty;
-		_Score = ((rows * cols) / timeNeeded) * 1000 * difficultyMultiplier;
+		_Score = rows * cols * (1000 / timeNeeded) * 1000 * difficultyMultiplier;
 		_TimeNeeded = timeNeeded;
 	}
 	
