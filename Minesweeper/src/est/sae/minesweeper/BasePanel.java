@@ -132,7 +132,7 @@ public class BasePanel extends JPanel implements Serializable {
 		
 		if(button != null)
 		{
-			if(button.getHiddenText() == "M")
+			if(button.getHiddenText().equals("M"))
 			{
 				return 1;
 			}
@@ -173,7 +173,7 @@ public class BasePanel extends JPanel implements Serializable {
 			
 			MineButton button = _Buttons[mineCol][mineRow]; 
 			
-			if(button != null && button.getHiddenText() == "")
+			if(button != null && button.getHiddenText().equals(""))
 			{
 				button.setHiddenText("M");
 				minesPlanted++;
@@ -206,7 +206,7 @@ public class BasePanel extends JPanel implements Serializable {
 		
 		for(MineButton button : _ButtonsFlagged)
 		{
-			if(button.getHiddenText() != "M")
+			if(button.getHiddenText().equals("M"))
 			{
 				flaggedAllMinesExclusively = false;
 			}
