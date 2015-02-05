@@ -39,6 +39,7 @@ public class ButtonActions implements MouseListener, Serializable {
 			if(buttonPressed.getHiddenText().equals("M"))
 			{
 				frame.LostGame();
+				return;
 			}
 			else if(buttonPressed.getHiddenText().equals("0"))
 			{
