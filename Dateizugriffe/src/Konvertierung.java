@@ -22,7 +22,6 @@ public class Konvertierung {
 		{
 			FileReader reader = new FileReader(file);
 			
-			Files.R
 			BufferedReader buffer = new BufferedReader(reader);
 			
 			File output = CreateOutputFile("USRDAT.TXT");
@@ -60,8 +59,14 @@ public class Konvertierung {
 		}
 	}
 
+	private static File OpenFile(String string) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	private static List<String> ReadFile(String filePath) {
-		return Files.readAllLines(new Path(filePath));
+		//return Files.readAllLines(File.);
+		return null;
 	}
 	
 	private static File CreateOutputFile(String path) throws IOException
