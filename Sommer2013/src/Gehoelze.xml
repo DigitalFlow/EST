@@ -1,0 +1,9 @@
+<Gehoelze>
+	<Baeume>
+		<Baum Art="Eiche" Pflanzjahr="2010" Preis="23"></Baum>
+	</Baeume>
+	<Straeucher>
+		<Strauch Art="Rhododendron" Pflanzjahr="2009" Preis="25"></Strauch>
+		<Strauch Art="Hortensie" Pflanzjahr="2006" Preis="15"></Strauch>
+	</Straeucher>
+</Gehoelze>
